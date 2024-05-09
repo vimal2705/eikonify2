@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  background: var(--primary-bg-color);
+  color: var(--primary-text-color);
+  min-height: 100vh;
+}
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+ul li {
+  list-style: none;
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 4rem;
+  font-weight: 450;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.wrapper {
+  width: var(--wrapperSize);
+}
+
+.fullWidth {
+  width: 100%;
+}
+.p-1 {
+  padding: 1rem;
+}
+.p-2 {
+  padding: 2rem;
+}
+.p-3 {
+  padding: 3rem;
+}
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+body::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 12px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 12px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}

@@ -1,0 +1,302 @@
+.home-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0rem;
+  padding: 2rem 1rem;
+
+  & h1 {
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    font-weight: 450;
+    user-select: none;
+  }
+  & img {
+    width: 128px;
+  }
+}
+
+.bgElementContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  z-index: -1;
+}
+.backgroundElement {
+  display: flex;
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  right: auto;
+
+  opacity: 0.2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: blur(5px);
+  animation: backgroundElement 50s infinite linear;
+}
+
+@keyframes backgroundElement {
+  0% {
+    transform: scale(1.5) rotate(0deg);
+  }
+  100% {
+    transform: scale(1.5) rotate(360deg);
+  }
+}
+.heroSection {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  & a {
+    background: var(--primary-color);
+    color: var(--primary-bg-color);
+    padding: 0.5rem 4rem;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: 2px solid transparent;
+    &:hover {
+      background: white;
+      color: black;
+      text-decoration: underline;
+      border: 2px solid var(--primary-color);
+    }
+  }
+  & h1 {
+    text-align: center;
+    letter-spacing: -1px;
+    font-weight: 200;
+    font-size: 3rem;
+    line-height: 3rem;
+    width: 70%;
+    margin: 0px;
+  }
+  & span {
+    width: 70%;
+    font-size: 1rem;
+    line-height: 1.2rem;
+
+    text-align: center;
+  }
+}
+
+.carousal {
+  display: flex;
+  width: 100%;
+  overflow: visible;
+  justify-content: flex-start;
+  gap: 1rem;
+  align-items: center;
+  position: relative;
+  margin: 0.5rem 0px;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 30%;
+    z-index: 1;
+    background: linear-gradient(
+      to right,
+      var(--primary-bg-color) 0%,
+      transparent 100%
+    );
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    width: 30%;
+    z-index: 1;
+    background: linear-gradient(
+      to left,
+      var(--primary-bg-color) 0%,
+      transparent 100%
+    );
+  }
+  & div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    animation: carousle01 var(--carousleTime) infinite linear;
+    animation-delay: calc(var(--carousleTime) * -1);
+    margin-right: 0.2rem;
+
+    &:nth-child(2) {
+      margin-left: -2rem;
+
+      animation: carousle02 var(--carousleTime) infinite linear;
+      animation-delay: calc(var(--carousleTime) / -2);
+    }
+    img {
+      width: var(--carousleSize);
+      height: var(--carousleHeight);
+      object-fit: cover;
+      object-position: center;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+
+      transition: all 0.5s ease-in-out;
+      cursor: pointer;
+      filter: saturate(0) contrast(1.2) brightness(1.2);
+      &:hover {
+        filter: saturate(1);
+      }
+    }
+  }
+}
+
+.carousal02 {
+  & div {
+    animation: carousle01A var(--carousleTime) infinite linear;
+    animation-delay: calc(var(--carousleTime) * -1);
+    margin-left: 0.8rem;
+    &:nth-child(2) {
+      margin-left: 0.12rem;
+      animation: carousle02A var(--carousleTime) infinite linear;
+      animation-delay: calc(var(--carousleTime) / -2);
+    }
+  }
+}
+
+@keyframes carousle01 {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes carousle02 {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+@keyframes carousle01A {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes carousle02A {
+  0% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.footer {
+  font-size: 12px;
+  margin: 2rem 0px;
+}
+
+.loginPopup {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+  top: 0px;
+  left: 0px;
+  backdrop-filter: blur(20px);
+  box-sizing: border-box;
+  & .loginPopupContent {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: black;
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0px 0px 20px rgba(255, 225, 31, 0.35);
+    & .loginPopupHeader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      & span {
+        font-size: 1rem;
+        font-weight: 200;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      & img {
+        width: 100px;
+      }
+    }
+    .loginPopupBody {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+      & .inputField {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        & input[type="email"],
+        & input[type="password"] {
+          height: 40px;
+          padding: 0.5rem;
+          border-radius: 0.2rem;
+          outline: none;
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          transition: all 0.3 cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+          &:focus {
+            border: 2px solid var(--primary-color);
+          }
+        }
+      }
+      & button {
+        background: var(--primary-color);
+        color: var(--primary-bg-color);
+        padding: 0.5rem 4rem;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-top: 1rem;
+        cursor: pointer;
+        border: 2px solid transparent;
+        &:hover {
+          background: white;
+          color: black;
+
+          border: 2px solid var(--primary-color);
+        }
+      }
+    }
+  }
+}

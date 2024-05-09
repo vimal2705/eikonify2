@@ -1,0 +1,739 @@
+.dashboardHeaderContainer {
+  background: var(--primary-bg-color);
+  box-shadow: 0 5px 10px rgba(255, 218, 35, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--primary-color);
+
+  &:hover {
+    background: var(--primary-bg-color);
+    box-shadow: 0 12px 30px rgba(255, 218, 35, 0.25);
+    border-bottom: 2px solid var(--primary-color);
+  }
+}
+.file-label {
+ margin-bottom: 50px;
+}
+
+.upload-image {
+    /* Add styles for your image here */
+    width: 50px; /* Example width */
+    height: 50px; /* Example height */
+    cursor: pointer; /* Ensure the cursor changes to pointer on hover */
+}
+
+/* Hide the default file input button */
+.hidden {
+    display: none;
+}
+.dashboardHeader {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: space-between;
+  & .userInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    & span.user {
+      background: var(--primary-color);
+      color: var(--primary-bg-color);
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      font-weight: bold;
+      user-select: none;
+      cursor: pointer;
+      & ul.userMenu {
+        display: flex;
+      }
+    }
+    & ul.userMenu {
+      position: absolute;
+      top: 120%;
+      left: -100px;
+      width: auto;
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 150px;
+      font-weight: 500;
+      font-size: 13px;
+      gap: 0.5rem;
+      border-radius: 0.5rem;
+      background: rgb(0, 0, 0);
+      padding: 1rem;
+      color: white;
+    }
+    & img {
+      width: 32px;
+    }
+  }
+
+  & img {
+    width: 120px;
+  }
+}
+
+.contentWrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.imageGridContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.5rem 0px;
+
+  & h1 {
+    font-size: 3.5rem;
+    font-weight: 300;
+    line-height: 3.5rem;
+    margin: 0px;
+  }
+  & .imageGrid {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    gap: 1rem;
+    width: 100%;
+    & div.image {
+      display: flex;
+      position: relative;
+      cursor: pointer;
+      border-radius: 1rem;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(240, 214, 44, 1);
+      &:hover {
+        & img.generatedImage {
+          filter: saturate(1.5) brightness(0.6) contrast(1.2);
+          transform: scale(1.02);
+          box-shadow: 0px 10px 20px rgba(240, 214, 44, 0.3);
+          border: 1px solid rgba(240, 214, 44, 1);
+        }
+
+        & img.addToFolderIcon {
+          display: flex;
+          opacity: 1;
+        }
+        & img.downloadIcon {
+          display: flex;
+          opacity: 1;
+        }
+      }
+      & span.count {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+        color: var(--primary-color);
+        backdrop-filter: blur(5px);
+        padding: 0.5rem;
+        border-radius: 20px;
+        font-size: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-weight: 500;
+      }
+      & img.addToFolderIcon {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        width: 40px;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 24px;
+        display: none;
+        opacity: 0;
+        border: 1px solid rgba(240, 214, 44, 0.1);
+        &:hover {
+          filter: brightness(1.4);
+          border: 1px solid rgba(240, 214, 44, 0.3);
+          transform: scale(1.2);
+        }
+      }
+      & img.downloadIcon {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 40px;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        padding: 0.5rem;
+        border-radius: 24px;
+        display: none;
+        opacity: 0;
+        border: 1px solid rgba(240, 214, 44, 0.1);
+        &:hover {
+          filter: brightness(1.4);
+          border: 1px solid rgba(240, 214, 44, 0.3);
+          transform: scale(1.2);
+        }
+      }
+      & img.generatedImage {
+        width: var(--imageSize);
+        height: var(--imageSize);
+        object-fit: cover;
+        object-position: center;
+        border-radius: 1rem;
+        filter: saturate(1) contrast(1.1) brightness(1);
+        transition: all 0.2s ease-in-out;
+        &:hover {
+          filter: saturate(1.5) brightness(0.6) contrast(1.2);
+          transform: scale(1.02);
+          box-shadow: 0px 10px 20px rgba(240, 214, 44, 0.3);
+          border: 1px solid rgba(240, 214, 44, 1);
+        }
+      }
+    }
+  }
+}
+
+// .generateBar {
+//   display: flex;
+//   width: 80%;
+//   align-items: center;
+//   justify-content: center;
+//   padding: 0rem 0rem;
+//   position: fixed;
+//   z-index: 100;
+//   background: rgba(white, 0);
+//   backdrop-filter: blur(5px);
+//   bottom: 2rem;
+//   border-radius: 2rem;
+//   border: 2px solid var(--primary-color);
+//   box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.3);
+//   &:hover {
+//     box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.3);
+//   }
+//   & img.upload-image {
+//     position: absolute;
+//     right: calc(140px + 1rem);
+//     width: 25px;
+//     cursor: pointer;
+//   }
+//   & input[type="text"] {
+//     background: rgba(255, 255, 255, 0.7);
+//     backdrop-filter: blur(25px);
+
+//     color: rgb(0, 0, 0);
+//     border: none;
+//     padding: 1rem;
+//     border-radius: 2rem;
+//     font-weight: 500;
+//     width: 100%;
+
+//     outline: none;
+//     text-indent: 1rem;
+//   }
+//   & button {
+//     background: black;
+//     color: white;
+//     padding: 0.8rem 2rem;
+//     border-radius: 2rem;
+//     font-weight: 500;
+//     cursor: pointer;
+//     border: none;
+//     position: absolute;
+//     right: 0.4rem;
+
+//     width: 140px;
+//     &:hover {
+//       background: var(--primary-color);
+//       color: black;
+//     }
+//   }
+// }
+.dod{
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content:center;
+  align-items:center;
+}
+
+.imagePopup {
+  display: flex;
+  align-items: center;
+  justify-content: flex start;
+  gap: 1rem;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  background: black;
+  padding: 1rem;
+  flex: 1;
+
+  overflow-x: scroll;
+
+  &::-webkit-scrollbar {
+    width: var(--sb-size);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 12px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 12px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    & {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
+  & .imagePopupContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    width: 600px;
+    flex-wrap: wrap;
+    cursor: pointer;
+    &:hover .imagePopupActions textarea {
+      display: block;
+      opacity: 1;
+      height: 90px;
+    }
+    &:hover .imagePopupActions {
+      margin-top: 0px;
+    }
+    & img.fullSizeImage {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 8px;
+      min-width: 600px;
+    }
+    & .imagePopupActions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      gap: 1rem;
+      margin-top: -3rem;
+      &:hover {
+        margin-top: 0px;
+      }
+      &:hover textarea {
+        display: block;
+        opacity: 1;
+        height: 90px;
+        width: 100%;
+      }
+      & textarea {
+        background: rgb(38, 38, 38);
+        resize: vertical;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 5px;
+        outline: none;
+        text-indent: 10px;
+        padding: 1rem;
+        color: white;
+        font-weight: 500;
+        min-height: 0px;
+        max-height: 150px;
+        opacity: 0;
+        height: 2px;
+        width: 100%;
+        transition: all 0.2s ease-in-out;
+        &:hover,
+        &:focus {
+          border: 1px solid var(--primary-color);
+          background: rgb(57, 57, 57);
+        }
+      }
+    }
+    & img.actionIconDownload,
+    & img.actionIconAddToFolder,
+    & img.actionRegenerate {
+      width: 50px;
+      height: 50px;
+      margin: 0px 0.2rem;
+      background: rgb(38, 38, 38);
+      border-radius: 25px;
+      padding: 0.75rem;
+      cursor: pointer;
+      &:hover {
+        background: rgb(57, 57, 57);
+      }
+    }
+  }
+  & a.closePopup {
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+
+    top: 2rem;
+
+    cursor: pointer;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(38, 38, 38);
+    &:hover {
+      background: rgb(57, 57, 57);
+      transform: scale(1.12);
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .imageGridContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.5rem 0px;
+
+    & h1 {
+      font-size: 3.5rem;
+      font-weight: 300;
+      line-height: 3.5rem;
+      margin: 0px;
+    }
+    & .imageGrid {
+      display: flex;
+      flex-wrap: wrap;
+
+      gap: 1rem;
+      width: 100% !important;
+
+      align-items: stretch;
+      justify-content: center;
+
+      & div.image {
+        display: flex;
+        position: relative;
+        width: calc(50% - 0.5rem);
+
+        cursor: pointer;
+        border-radius: 1rem;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(240, 214, 44, 1);
+
+        &:hover {
+          & img.generatedImage {
+            filter: saturate(1.5) brightness(0.6) contrast(1.2);
+            transform: scale(1.02);
+            box-shadow: 0px 10px 20px rgba(240, 214, 44, 0.3);
+            border: 1px solid rgba(240, 214, 44, 1);
+          }
+
+          & img.addToFolderIcon {
+            display: flex;
+            opacity: 1;
+          }
+          & img.downloadIcon {
+            display: flex;
+            opacity: 1;
+          }
+        }
+        & span.count {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.5);
+          color: var(--primary-color);
+          backdrop-filter: blur(5px);
+          padding: 0.5rem;
+          border-radius: 20px;
+          font-size: 14px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          font-weight: 500;
+        }
+        & img.addToFolderIcon {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(5px);
+          width: 40px;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 24px;
+          display: none;
+          opacity: 0;
+          border: 1px solid rgba(240, 214, 44, 0.1);
+          &:hover {
+            filter: brightness(1.4);
+            border: 1px solid rgba(240, 214, 44, 0.3);
+            transform: scale(1.2);
+          }
+        }
+        & img.downloadIcon {
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+          width: 40px;
+          cursor: pointer;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(5px);
+          padding: 0.5rem;
+          border-radius: 24px;
+          display: none;
+          opacity: 0;
+          border: 1px solid rgba(240, 214, 44, 0.1);
+          &:hover {
+            filter: brightness(1.4);
+            border: 1px solid rgba(240, 214, 44, 0.3);
+            transform: scale(1.2);
+          }
+        }
+        & img.generatedImage {
+          width: var(--imageSizeMobile) !important;
+          height: var(--imageSizeMobileHeight) !important;
+          object-fit: cover;
+          object-position: center;
+          border-radius: 1rem;
+          filter: saturate(1) contrast(1.1) brightness(1);
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            filter: saturate(1.5) brightness(0.6) contrast(1.2);
+            transform: scale(1.02);
+            box-shadow: 0px 10px 20px rgba(240, 214, 44, 0.3);
+            border: 1px solid rgba(240, 214, 44, 1);
+          }
+        }
+      }
+    }
+  }
+
+  // .generateBar {
+  //   display: flex;
+  //   width: 100% !important;
+  //   max-width: 1024px;
+  //   align-items: center;
+  //   justify-content: center;
+  //   padding: 0rem 0rem;
+  //   position: fixed;
+  //   z-index: 100;
+  //   background: rgba(0, 0, 0, 0.5);
+  //   backdrop-filter: blur(12px); 
+  //   bottom: 0rem;
+  //   border-radius: 0rem;
+  //   height: 10vh;
+  //   max-height: 90px;
+  //   min-height: 70px;
+
+  //   left: 0px;
+  //   border: 0px solid var(--primary-color);
+  //   & img.upload-image {
+  //     position: absolute;
+  //     right: calc(120px + 1.5rem);
+  //     width: 25px;
+  //   }
+  //   & input[type="text"] {
+  //     background: rgba(255, 255, 255, 0.7);
+  //     backdrop-filter: blur(25px);
+  //     color: rgb(0, 0, 0);
+  //     border: none;
+  //     padding: 1rem;
+  //     border-radius: 0rem;
+  //     font-weight: 500;
+  //     width: 100%;
+  //     height: 10vh;
+  //     max-height: 90px;
+  //     min-height: 70px;
+  //     outline: none;
+  //     text-indent: 1rem;
+  //   }
+  //   & button {
+  //     background: black;
+  //     color: white;
+  //     padding: 0.8rem 2rem;
+  //     border-radius: 2rem;
+  //     font-weight: 500;
+  //     cursor: pointer;
+  //     border: none;
+  //     position: absolute;
+  //     right: 0.2rem;
+  //     margin-right: 1rem;
+  //     width: 120px;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+
+  //     &:hover {
+  //       background: var(--primary-color);
+  //       color: black;
+  //     }
+  //   }
+  // }
+
+  .imagePopup {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 1000;
+    background: black;
+    padding: 3rem;
+    flex: 1;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    padding-top: 100px;
+    &::-webkit-scrollbar {
+      width: var(--sb-size);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--sb-track-color);
+      border-radius: 12px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--sb-thumb-color);
+      border-radius: 12px;
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+      & {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+      }
+    }
+    & .imagePopupContent {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start !important;
+      justify-content: flex-start !important;
+      width: 100%;
+      flex-wrap: wrap;
+      cursor: pointer;
+
+      &:hover .imagePopupActions textarea {
+        display: block;
+        opacity: 1;
+        height: 90px;
+        width: 100%;
+      }
+      &:hover .imagePopupActions {
+        margin-top: 0px;
+      }
+      & img.fullSizeImage {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 8px;
+        min-width: 100%;
+        max-height: 350px;
+      }
+      & .imagePopupActions {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 1rem;
+        margin-top: -3rem;
+        &:hover {
+          margin-top: 0px;
+        }
+        &:hover textarea {
+          display: block;
+          opacity: 1;
+          height: 90px;
+          width: 100%;
+        }
+        & textarea {
+          background: rgb(38, 38, 38);
+          resize: vertical;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 5px;
+          outline: none;
+          text-indent: 10px;
+          padding: 1rem;
+          color: white;
+          font-weight: 500;
+          min-height: 0px;
+          max-height: 150px;
+          opacity: 0;
+          height: 2px;
+          width: 100%;
+          transition: all 0.2s ease-in-out;
+          &:hover,
+          &:focus {
+            border: 1px solid var(--primary-color);
+            background: rgb(57, 57, 57);
+          }
+        }
+      }
+      & img.actionIconDownload,
+      & img.actionIconAddToFolder,
+      & img.actionRegenerate {
+        width: 50px;
+        height: 50px;
+        margin: 0px 0.2rem;
+        background: rgb(38, 38, 38);
+        border-radius: 25px;
+        padding: 0.75rem;
+        cursor: pointer;
+        &:hover {
+          background: rgb(57, 57, 57);
+        }
+      }
+    }
+
+    
+    & a.closePopup {
+      width: 60px;
+      height: 60px;
+      // position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+
+      top: 2rem;
+
+      cursor: pointer;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgb(38, 38, 38);
+      &:hover {
+        background: rgb(57, 57, 57);
+        transform: scale(1.12);
+      }
+    }
+  }
+  
+}
+
