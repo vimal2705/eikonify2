@@ -8,6 +8,9 @@ import './main1.scss'
 import './variables.scss'
 import SignUp from './SignUp';
 import Download from './Download';
+import Favourites from './Favourites';
+import Collections from './Collection';
+import Collectionslist from './collectionlist';
 
 const Container = () => {
     
@@ -16,7 +19,10 @@ const Container = () => {
             <Route>
                 <Route path="/" element={<SignUp />} />
                 {/* <Route path="/login" element={<Login />} /> */}
+                <Route path='/collections' element={< Collections/>}/>
+                <Route path="/collectionslist" element={<Collectionslist/>}/>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/favourites" element={<Favourites/>}/>
                 {/* <Route path="/download" element={<Download />} /> */}
 
             </Route>

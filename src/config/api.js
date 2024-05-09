@@ -2,13 +2,13 @@ import Axios from "axios";
 
 // export const baseURL = process.env.REACT_APP_API_URL;
 // export const baseURL ='https://2a9b-2405-201-201c-88b2-2405-28d9-fa1d-f111.ngrok-free.app';
-export const baseURL = `http://localhost:3000`;
+export const baseURL = `http://20.55.71.246:3000`;
 
 const api = Axios.create({ baseURL });
 
 api.interceptors.request.use(async (request) => {
-  // request.headers["Authorization"] = "Bearer " + localStorage.getItem("token");
-  request.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMzLCJpYXQiOjE3MTUxNDQ4MjZ9.G2qbjGaxY2XhksbVac1VkILvjPW8IIfl5fo_n8zBXMw"
+  request.headers["Authorization"] = "Bearer" + localStorage.getItem("token");
+  // request.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMzLCJpYXQiOjE3MTUxNDQ4MjZ9.G2qbjGaxY2XhksbVac1VkILvjPW8IIfl5fo_n8zBXMw"
   return request;
 });
 

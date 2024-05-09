@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { auth } from "../config/call"
 import { toast } from "react-toastify";
 import { requestForToken, messaging, requestToken } from "../config/firebase"
-
+import axios from "axios"
 
 const SignUp = () => {
   const [showForm, setShowForm] = useState(false);
@@ -11,6 +11,8 @@ const SignUp = () => {
   const token = localStorage.getItem("token");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [fcmtoken, setFcmToken] = useState();
@@ -19,39 +21,80 @@ const SignUp = () => {
     setShowForm(false);
   };
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6; // Example: Password must be at least 6 characters long
+  };
+
 
   const toggleForm = () => {
     setShowForm(!showForm);
   };
 
   const handleSubmit = async (e) => {
-    console.log("asdasd", email, password);
+
 
     e.preventDefault();
+     if (!validateEmail(email)) {
+      setEmailError("Invalid email address");
+      return;
+    } else {
+      setEmailError("");
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError("Please enter Password ");
+      return;
+    } else {
+      setPasswordError("");
+    }
+
 
     console.log("qweqwew", e);
-    if (email.length) {
-      toast.success("Company Name added successfully");
-    }
+
+  try {
+
+    
+
     await auth
       .login({
         "email": email,
         "password": password,
         "fcm_token": "Asdas"
       })
-      .then(({ data }) => {
+      .then(async({ data }) => {
 
         console.log("Asaaaa", data);
 
         localStorage.setItem("token", data.token);
-        if (data.status == 200 ) {
+        await axios.get(
+          `http://20.55.71.246:3000/api/v1/user`,
+          {
+            headers: {
+              Authorization: `Bearer ${data.token}`,
+            }
+          }).then(({data})=>{
+         
+          console.log("Asdasdss",data);
+          // setUser(data.data?.user)
+      
+        if (data.data?.user.access_eikonify ) {
              setTimeout(() => {
           window.location.href = "/dashboard";
         }, 500);
+        }else{
+          setMessage("You don't have access to Eikonify")
         }
-     
       })
+      })
+    } catch (error) {
 
+    console.log("Asda",error);
+    }
     // console.log("RESPONSE", response);
   };
   useEffect(() => {
@@ -76,8 +119,8 @@ const SignUp = () => {
       <div className="loginPopup" style={showForm ? { display: 'flex' } : { display: 'none' }}>
         <div className="loginPopupContent"  ref={formRef}>
           <div className="loginPopupHeader">
-            <button className="closeButton" onClick={handleClose }>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"  style={{background: "#ffd338"}} viewBox="0 0 24 24">
+            <button className="closeButton" onClick={handleClose } >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"  style={{ borderRadius:"50%",background: "#ffd338"}} viewBox="0 0 24 24">
                 <path d="M12 10.586L8.707 7.293a1 1 0 0 0-1.414 1.414L10.586 12l-3.293 3.293a1 1 0 1 0 1.414 1.414L12 13.414l3.293 3.293a1 1 0 0 0 1.414-1.414L13.414 12l3.293-3.293a1 1 0 0 0-1.414-1.414L12 10.586z"/>
               </svg>
             </button>
@@ -85,17 +128,18 @@ const SignUp = () => {
             <span>Sign in to your account to access Eikonify</span>
           </div>
           <div className="loginPopupBody">
+          <div className="inputField">
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ color: "#000" }} />
+                {emailError && <span className="error">{emailError}</span>}
+              </div>
+              <div className="inputField">
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ color: "#000" }} />
+                {passwordError && <span className="error">{passwordError}</span>}
+              </div>
             <div className="inputField">
-              <label htmlFor="email">Email</label>
-              <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ color: "#000" }} />
-              
-            </div>
-            <div className="inputField">
-              <label htmlFor="password">Password</label>
-              <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ color: "#000" }} />
-            </div>
-            <div className="inputField">
-              <button onClick={handleSubmit}>Sign In</button>
+              <button onClick={handleSubmit} disabled={message.length == 0 ? false : true }> {message.length == 0 ? "Sign In":message}</button>
             </div>
           </div>
         </div>
@@ -115,7 +159,7 @@ const SignUp = () => {
             technology.</span
           >
 
-          <a href="#" onClick={toggleForm} >Sign In</a>
+          <a href="#" onClick={toggleForm} > Sign In</a>
         </div>
 
       </div>

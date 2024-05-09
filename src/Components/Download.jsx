@@ -2,32 +2,86 @@ import { logDOM } from '@testing-library/react';
 import React, { useEffect, useState } from 'react'
 import { auth, common } from "../config/call";
 import axios from "axios"
-const Download = ({ data,passid,closemodel }) => {
+import Modal from './Modal';
+
+const Download = ({ data,passid,closemodel,user }) => {
 
 console.log("ASSSSS-=-=-=-=",data?.imageData[0]?.imagineData.id);
 const [details,setdetails] = useState(data)
 const token = '';
+const [list,setlist]=useState()
 const [searchValue ,setSearchValue] = useState()
 const [selectedindex,setselected] = useState()
 const [imagedata,setimagedata] = useState([])
+const [imageid,  setImageid]= useState()
 const [loading, setLoading] = useState(false);
 const [alldata,setalldata]= useState()
+const [showModal, setShowModal] = useState(false);
+const [collection,setCollection] =useState()
+
+// Function to open the modal
+const openModal = () => {
+  setShowModal(true);
+};
+
+// Function to close the modal
+const closeModal = () => {
+  setShowModal(false);
+};
 
 useEffect(()=>{
   getdetails(passid)
+  getcollection()
 },[])
+
+const getcollection = async ()=>{
+   let token = localStorage.getItem('token')
+  const response = await axios.get(
+    `http://20.55.71.246:3000/api/v1/eikonify/collection/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+   
+  );
+
+  console.log("Asdasdss",response.data.data.collectionData.recordset);
+  setCollection(response.data.data.collectionData.recordset)
+}
+
+const addcollection = async (value)=>{
+  let token = localStorage.getItem('token')
+  let param ={name: value}
+  const response = await axios.post(
+    `http://20.55.71.246:3000/api/v1/eikonify/collection`,
+    param,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+   
+  );
+  console.log("Asdasd",response)
+  getcollection()
+
+
+}
+
 
 
 const removefav = async (id,fav) => {
-  console.log(fav,"asdasss",id);
+
   try {
+    let token = localStorage.getItem('token')
     let param ={favorite:0}
     const response = await axios.patch(
-      `http://localhost:3000/api/v1/eikonify/removefavorite/${id}`,
+      `http://20.55.71.246:3000/api/v1/eikonify/removefavorite/${id}`,
       param,
       {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMzLCJpYXQiOjE3MTUxNjE3Nzd9.-tJTGxFOiAxbXLS2zasOpNmGl4mRnl_L-o8sLsKNP2g`,
+          Authorization: `Bearer ${token}`,
         }
       }
      
@@ -41,15 +95,16 @@ const removefav = async (id,fav) => {
   }
 };
 const addfav = async (id,fav) => {
-  console.log(fav,"asdasss",id);
+
   try {
+    let token = localStorage.getItem('token')
     let param ={favorite:1}
     const response = await axios.patch(
-      `http://localhost:3000/api/v1/eikonify/addfavorite/${id}`,
+      `http://20.55.71.246:3000/api/v1/eikonify/addfavorite/${id}`,
       param,
       {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMzLCJpYXQiOjE3MTUxNjE3Nzd9.-tJTGxFOiAxbXLS2zasOpNmGl4mRnl_L-o8sLsKNP2g`,
+          Authorization: `Bearer ${token}`,
         }
       }
      
@@ -62,9 +117,37 @@ const addfav = async (id,fav) => {
     throw error; // If you want to handle errors in the calling function
   }
 };
+const addtocollection =async(id)=>{
+  console.log(":Asda",id);
+  let token = localStorage.getItem('token')
+  let param ={  "collection_id":id}
+  await axios.patch(
+    `http://20.55.71.246:3000/api/v1/eikonify/image/${imageid}`,
+    param,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+   
+  ).then(({data})=>{
+     setShowModal(false)
+    console.log("Asdasdss",data);
+
+  })
+}
 
 const getdetails = async (id) => {
-  common.getDetails(id).then(({ data }) => {
+  let token = localStorage.getItem('token')
+   await axios.get(
+    `http://20.55.71.246:3000/api/v1/eikonify/requestId/`+`${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+   
+  ).then(({ data }) => {
     console.log("data-=-=-=-=-=-=-", data.data);
     setimagedata(data.data);
 
@@ -88,13 +171,19 @@ const getdetails = async (id) => {
   });
 };
 
+const collectionmodal =async(id)=>{
+  setImageid(id)
+  setShowModal(true)
+
+
+}
 
 
   const Imagesdownload = (data,index) => {
-    console.log("Asdasd",data.data.favorite);
+
     
     const downloadImage = (url) => {
-      const imageUrl = `http://localhost:3000/`+`${url}`; 
+      const imageUrl = `http://20.55.71.246:3000/`+`${url}`; 
       fetch(imageUrl)
       .then(response => response.blob())
       .then(blob => {
@@ -115,7 +204,8 @@ const getdetails = async (id) => {
       });
     };
 
-    const  handleRegenerate = (param) => {
+
+    const  handleRegenerate = async(param) => {
       const token = localStorage.getItem("token");
       if (!token) {
         setTimeout(() => {
@@ -125,13 +215,25 @@ const getdetails = async (id) => {
         const formData = new FormData();
         const key = "prompt" ;
         formData.append(key, searchValue);
-        common.regenerateImage(param, formData).then(closemodel(false));
+        
+        await axios.post(
+          `http://20.55.71.246:3000/api/v1/eikonify/`+`${param}`,
+       formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+         
+        ).then(closemodel(false));
       }
     };
 
+
+
     return (
       <div className="imagePopupContent">
-        <img className="fullSizeImage" src={`http://localhost:3000/`+`${data.data.url}`} />
+        <img className="fullSizeImage" src={`http://20.55.71.246:3000/`+`${data.data.url}`} />
         <div className="imagePopupActions">
           <textarea placeholder="prompt" 
           onClick={()=> setselected(data.data.id) }
@@ -143,6 +245,7 @@ const getdetails = async (id) => {
             src="assets/images/download-icon.svg"
           />
           <img
+           onClick={()=>collectionmodal(data.data.id)}
             className="actionIconAddToFolder"
             alt="Add to Collection"
             src="assets/images/add-to-folder.svg"
@@ -181,11 +284,19 @@ const getdetails = async (id) => {
       </div>
     )}
     <div className="imagePopup">
+    {showModal && (
+        <Modal onClose={closeModal} id={imageid} data={collection} addcollection={addcollection} addtocollection={addtocollection}>
+          {/* Content of the modal */}
+          <h2>Modal Title</h2>
+          <p>This is the content of the modal.</p>
+        </Modal>
+      )}
       {alldata && alldata.map((item, index) => (
         <Imagesdownload key={index} data={item} />
       ))}
       <a className="closePopup" style={{ backgroundColor: '#ffd338', color: 'black' }} onClick={() => { closemodel(false) }} >X</a>
     </div>
+  
   </div>
 
   )

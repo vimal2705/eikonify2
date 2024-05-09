@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [searchValue, setSearchValue] = useState("")
   // const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
-  const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMzLCJpYXQiOjE3MTUxNjE3Nzd9.-tJTGxFOiAxbXLS2zasOpNmGl4mRnl_L-o8sLsKNP2g';
+  const token = `Bearer ${localStorage.getItem('token')}` ;
   const [user, setUser] = useState(undefined);
   
   const [imagedata,setimagedata] = useState([])
@@ -35,16 +35,16 @@ const Dashboard = () => {
 
   ];
   const handleImageChange = (e) => {
-    console.log(
-      "Asdasdasdasdasdsdadads"
-    );
     const selectedImage = e.target.files[0];
-    console.log("e.target.files[0]", e.target.files[0]);
+    console.log("Selected image:", selectedImage);
     setSearchValue(selectedImage);
   };
+  
   const onUpload = () => {
+    console.log("Upload button clicked");
     const input = document.getElementById("file-input");
     input.click();
+    console.log("Asdas",input);
   };
   const navigate = useNavigate();
   const [menuVisible, setMenuVisible] = useState(false);
@@ -82,19 +82,33 @@ const Dashboard = () => {
   }
 
 const getuser = async ()=>{
-  if(token){
-    auth.userDetail().then(({data})=>{
-      console.log("Asdasd",data);
+  let token = localStorage.getItem('token')
+    await axios.get(
+      `http://20.55.71.246:3000/api/v1/user`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }).then(({data})=>{
+     
+      console.log("Asdasdss",data);
       setUser(data.data?.user)
     })
-  }
+  
 }
   const fetchListing = async () => {
  
     // setRequestData(response.data);
-    common
-      .getListing()
-      .then(({ data }) => {
+    let token = localStorage.getItem('token')
+    await axios.get(
+      `http://20.55.71.246:3000/api/v1/eikonify/request/user`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+     
+    ).then(({ data }) => {
       
         const sortedArray = data.data.sort(
           (a, b) => new Date(b.updateAt) - new Date(a.updateAt)
@@ -119,7 +133,7 @@ const getuser = async ()=>{
           return acc;
         }, []);
         setLoading(false);
-        console.log("groupedData", groupedData[0].Date);
+      
 
         setData(groupedData);
       })
@@ -143,10 +157,22 @@ const getuser = async ()=>{
   }, []);
 
   const getdetails = async (id) => {
-
+    let token = localStorage.getItem('token')
+     await axios.get(
+      `http://20.55.71.246:3000/api/v1/eikonify/requestId/`+`${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+     
+    ).then(({ data }) => {
+    console.log("data-=-=-=-=-=-=-", data.data);
+   
     setimagedata(data.data);
     setpassid(id)
     setOpenModel(true);
+  })
  
   };
 
@@ -165,9 +191,16 @@ const getuser = async ()=>{
       const key = typeof param === "string" ? "prompt" : "image";
       formData.append(key, param);
       if (typeof param === "string") {
-        common
-          .generateImage(formData)
-          .then(() => {
+    await axios.post(
+          `http://20.55.71.246:3000/api/v1/eikonify/check/`,
+         formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+         
+        ).then(() => {
             fetchListing();
             // toast.success("Success");
             setLoading(true);
@@ -179,7 +212,7 @@ const getuser = async ()=>{
           });
       } else {
         var myHeaders = new Headers();
-        const Bearer = "Bearer " + localStorage.getItem("token");
+        const Bearer = `Bearer ${token}`;
         myHeaders.append("Authorization", Bearer);
 
         var formdata = new FormData();
@@ -213,7 +246,17 @@ const getuser = async ()=>{
 
   const getDetailsAndCreateZip = async (id) => {
     try {
-      const { data } = await common.getDetails(id);
+   
+      let token = localStorage.getItem('token')
+      const data = await axios.get(
+        `http://20.55.71.246:3000/api/v1/eikonify/requestId/`+`${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+       
+      );
       console.log("data-=-=-=-=-=-=-", data.data);
       setimagedata(data.data);
   
@@ -226,7 +269,7 @@ const getuser = async ()=>{
         for (let i = 0; i < data?.data?.imageData[index]?.imagineData.length; i++) {
           // Push each URL into the urls array
           console.log("asdasd",data?.data?.imageData[index]?.imagineData[i]);
-          urls.push(`http://localhost:3000/${data?.data?.imageData[index].imagineData[i].url}`);
+          urls.push(`http://20.55.71.246:3000/${data?.data?.imageData[index].imagineData[i].url}`);
         }
       }
   
@@ -254,19 +297,32 @@ const getuser = async ()=>{
       // Handle error
     }
   };
+  const onLogout = () => {
+    navigate("/");
+    localStorage.clear();
+  };
+
 
   const Imagesview = (data) => {
-    
+
     return (
+      data.data?.imagine_status === "pending"  || data.data.url === null ? 
       <div className="image">
-        <img className="generatedImage" onClick={() => getdetails(data.data.id)} src={data?.url?.includes('/')? '/public/eikonify-symbol.png': `http://localhost:3000/`+`${data.data.url}`} />
+      <img className="generatedImage" src='assets/images/eikonify-symbol.png'/>
+      <span className="count">{data.data.image_count}</span>
+     
+    </div>:
+      <div className="image">
+        <img className="generatedImage" onClick={() => getdetails(data.data.id)} src={data?.url?.includes('/')? '/public/eikonify-symbol.png': `http://20.55.71.246:3000/`+`${data.data.url}`} />
         <span className="count">{data.data.image_count}</span>
         <img onClick={()=> getDetailsAndCreateZip(data.data.id)} className="downloadIcon" src="assets/images/download-icon.svg" />
         <img
           className="addToFolderIcon"
           src="assets/images/add-to-folder.svg"
         />
-      </div>)
+      </div>
+     
+      )
   }
 
   return (
@@ -282,31 +338,53 @@ const getuser = async ()=>{
               {user &&  <span className="user" onClick={toggleMenu}>  {user?.first_name[0].toUpperCase()}
                           {user?.last_name[0].toUpperCase()}
                           </span>}
-                <ul className={`userMenu ${menuVisible ? 'show' : ''}`}>
-                  <li>My Collections</li>
-                  <li>Archive</li>
-                  <li>Logout</li>
+                <ul className={`userMenu ${menuVisible ? 'show' : ''} `}>
+                  <li style={{cursor:"pointer"}} onClick={()=>{  navigate("/collections")}}>My Collections</li>
+                  <li  style={{cursor:"pointer"}} onClick={()=>{  navigate("/favourites")}} >Favourites</li>
+                  {/* <li  style={{cursor:"pointer"}}>Archive</li> */}
+                  <li  style={{cursor:"pointer"}} onClick={()=>{
+onLogout()
+                  }}>Logout</li>
                 </ul>
-                <img src="assets/images/Logout.svg" />
+                <img src="assets/images/Logout.svg" onClick={()=>{
+onLogout()
+                  }} />
               </div>
             </div>
           </div>
           <div className="con4">
+      
             <div className="generateBar">
-              <input type="text"   value={typeof searchValue === "string" ? searchValue : searchValue.name}
-    disabled={typeof searchValue !== "string"}
-    onChange={(e) => setSearchValue(e.target.value)} placeholder="keywords" />
-              <label for="file-input" className="file-label">
-                <img className="upload-image" src="assets/images/upload-image.svg" onClick={onUpload} alt="Upload Image" />
-             
-              </label>
-              <input
+            <input
                 type="file"
                 className="hidden"
                 accept="image/png, image/jpeg"
                 onChange={handleImageChange}
                 id="file-input"
-              />
+            />
+              <input type="text"   value={
+                  typeof searchValue === "string"
+                    ? searchValue
+                    : searchValue.name
+                }
+                disabled={typeof searchValue !== "string"}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    onGenerate(searchValue);
+                  }
+                }} placeholder="keywords" />
+              
+             <label htmlFor="file-input" className="file-label">
+  <img
+    className="upload-image"
+
+    onClick={onUpload}
+    src="assets/images/upload-image.svg"
+    alt="Upload Image Icon"
+  />
+</label>
+
               <button   onClick={() => onGenerate(searchValue)} >Generate</button>
             </div>
           </div>
@@ -344,7 +422,7 @@ const getuser = async ()=>{
         </div>
       )}
       <div>
-        {openModel && <Download  passid={passid} data={imagedata}  closemodel={setOpenModel} />}
+        {openModel && <Download user={user} passid={passid} data={imagedata}  closemodel={setOpenModel} />}
       </div>
     </>
 
